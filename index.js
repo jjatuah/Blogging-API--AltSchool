@@ -4,13 +4,16 @@ const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
 require('dotenv').config();
-
-const PORT = 7500
-
 const app = express()
 
-app.use(bodyParser.urlencoded({ extended: false }));
+const blogRoute = require("./routes/blog.route")
 
+const PORT = 7500;
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use("/blog", blogRoute);
 
 app.get('/', (req, res) => {
     res.send("Login or signup to make an order")

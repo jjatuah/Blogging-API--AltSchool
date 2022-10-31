@@ -17,7 +17,7 @@ const BlogSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    
+
     author: {
       type: String,
       required: true,
@@ -37,8 +37,14 @@ const BlogSchema = new mongoose.Schema(
     reading_time: {
       type: Number
     },
+
+    body: {
+      type: String,
+      required: true,
+      unique: true
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Post", BlogSchema);
+module.exports = mongoose.model("Blog", BlogSchema);
