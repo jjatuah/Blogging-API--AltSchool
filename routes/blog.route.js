@@ -118,6 +118,13 @@ blogRoute.patch('/:id', async (req, res) => {
           },
           { new: true }
         );
+
+        let updatedReadingTime = readTimeFunction(updatedBlog.body);
+
+        updatedBlog.reading_time = updatedReadingTime;
+
+        updatedBlog.save();
+
         res.status(200).json(updatedBlog);
       } catch (err) {
         res.status(500).json(err);
