@@ -137,6 +137,40 @@ blogRoute.patch('/:id', async (req, res) => {
   }
 })
 
+blogRoute.put('/:id', async (req, res) => {
+
+  const blogId = req.params.id;
+
+  try {
+    const blog = await blogModel.findById(blogId);
+    if (blog.author === req.body.author) {
+      try {
+        const updatedBlog = await blogModel.findByIdAndUpdate(
+          blogId,
+          {
+            $set: req.body,
+          },
+          { new: true }
+        );
+
+        let updatedReadingTime = readTimeFunction(updatedBlog.body);
+
+        updatedBlog.reading_time = updatedReadingTime;
+
+        updatedBlog.save();
+
+        res.status(200).json(updatedBlog);
+      } catch (err) {
+        res.status(500).json(err);
+      }
+    } else {
+      res.status(401).json("You can only update your own post!");
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
+
 blogRoute.delete('/:id', async (req, res) => {
 
   const blogId = req.params.id;
