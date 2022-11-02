@@ -10,30 +10,65 @@ const readTimeFunction = (text) => {
   return time;
 } 
 
+// blogRoute.post('/', async (req, res) => {
+//     const body = req.body;
+//     const blogArticle = body.body;
+//     let reading_time;
+
+//     blogArticle ? reading_time = readTimeFunction(blogArticle) : res.json({ status: false, message: "Blog body can't be empty" });
+
+//     const blogDetails = { 
+//         title: body.title,
+//         description: body.description,
+//         tags: body.tags,
+//         author: body.author,
+//         state: body.state,
+//         reading_time,
+//         body: blogArticle
+//     }
+
+//     await blogModel.create(blogDetails)
+//         .then((blog) => {
+//             return res.json({ status: true, blog }).status(201)
+//         }).catch((err) => {
+//             return res.json({ status: false, message: err }).status(403)
+//     })
+// })
+
+
 blogRoute.post('/', async (req, res) => {
-    const body = req.body;
-    const blogArticle = body.body;
-    let reading_time;
+  try {
+        const body = req.body;
+        const blogArticle = body.body;
+        let reading_time;
 
-    blogArticle ? reading_time = readTimeFunction(blogArticle) : res.json({ status: false, message: "Blog body can't be empty" });
-
-    const blogDetails = { 
-        title: body.title,
-        description: body.description,
-        tags: body.tags,
-        author: body.author,
-        state: body.state,
-        reading_time,
-        body: blogArticle
-    }
-
-    await blogModel.create(blogDetails)
+        if (blogArticle) {
+          reading_time = readTimeFunction(blogArticle)
+        }
+        // blogArticle ? reading_time = readTimeFunction(blogArticle) : res.json({ status: false, message: "Blog body can't be empty" });
+    
+        const blogDetails = { 
+            title: body.title,
+            description: body.description,
+            tags: body.tags,
+            author: body.author,
+            state: body.state,
+            reading_time,
+            body: blogArticle
+        }
+    
+        await blogModel.create(blogDetails)
         .then((blog) => {
-            return res.json({ status: true, blog }).status(201)
+          return res.json({ status: true, blog }).status(201)
         }).catch((err) => {
-            return res.json({ status: false, message: err }).status(403)
-    })
+          return res.json({ status: false, message: err }).status(403)
+        })
+    
+  } catch (err) {
+    res.status(500).json(err);
+  }
 })
+
 
 
 blogRoute.get('/', async (req, res) => {
