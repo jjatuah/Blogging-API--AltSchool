@@ -29,9 +29,9 @@ blogRoute.post('/', async (req, res) => {
 
     await blogModel.create(blogDetails)
         .then((blog) => {
-            return res.json({ status: true, blog })
+            return res.json({ status: true, blog }).status(201)
         }).catch((err) => {
-            return res.json({ status: false, message: err })
+            return res.json({ status: false, message: err }).status(403)
     })
 })
 
@@ -79,40 +79,29 @@ blogRoute.get('/', async (req, res) => {
      res.status(500).json({ status: false, message: err });
 
   }
-
-
-    // const {total_price, order, created_at} = req.query;
-    // let totNum;
-    // let orderNum;
-    // let creNum;
-    // let page = 1;
-    // let maxi = 2;
-    // total_price === "asc" ? totNum = 1 : totNum = -1;
-    // order === "asc" ? orderNum = 1 : orderNum = -1;
-    // created_at === "asc" ? creNum = 1 : creNum = -1;
-
-    // await orderModel.find().sort({total_price: totNum, order: orderNum, created_at: creNum }).skip((page - 1) * maxi).limit(maxi)
-    //     .then((order) => {
-    //         return res.json({ status: true, order })
-    //     }).catch((err) => {
-    //         return res.json({ status: false, message: err })
-    //     })
 })
 
 
-// blogRoute.get('/:orderId', async (req, res) => {
-//     const { orderId } = req.params;
+blogRoute.get('/:blogId', async (req, res) => {
+    const { blogId } = req.params;
     
-//     await orderModel.findById(orderId)
-//         .then((order)=> {
-//             if(!order) {
-//                 return res.status(404).json({ status: false, order: null })
-//             }
-//             return res.json({ status: true, order }) 
-//         }).catch((err) => {
-//             return res.json({ status: false, message: err })
-//     }) 
-// })
+    await blogModel.findById(blogId)
+        .then((blog)=> {
+            if(!blog) {
+                return res.status(404).json({ status: false, blog : null })
+            }
+
+            blog.read_count++
+
+            blog.save();
+
+            const { author, ...result } = blog;
+            const blogResult = result._doc
+            return res.json({ status: true, witten_by : author, blogResult }) 
+        }).catch((err) => {
+            return res.json({ status: false, message: err })
+    }) 
+})
 
 // blogRoute.patch('/:id', async (req, res) => {
 //     const { id } = req.params;
@@ -148,5 +137,7 @@ blogRoute.get('/', async (req, res) => {
 //           return res.json({ status: false, message: err })
 //     })
 // })
+
+
 
 module.exports = blogRoute;
