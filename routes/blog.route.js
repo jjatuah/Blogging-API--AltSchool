@@ -106,6 +106,7 @@ blogRoute.get('/:blogId', async (req, res) => {
 blogRoute.patch('/:id', async (req, res) => {
 
   const blogId = req.params.id;
+
   try {
     const blog = await blogModel.findById(blogId);
     if (blog.author === req.body.author) {
@@ -129,16 +130,26 @@ blogRoute.patch('/:id', async (req, res) => {
   }
 })
 
-// blogRoute.delete('/:id', async (req, res) => {
-//     const { id } = req.params;
+blogRoute.delete('/:id', async (req, res) => {
 
-//     await orderModel.deleteOne({ _id: id})
-//         .then((order) => {
-//             return res.json({ status: true, order, message: "Order deleted successfully" })
-//         }).catch((err) => {
-//           return res.json({ status: false, message: err })
-//     })
-// })
+  const blogId = req.params.id;
+
+  try {
+    const blog = await blogModel.findById(blogId);
+    if (blog.author === req.body.author) {
+      try {
+        await blog.delete();
+        res.status(200).json("Post successfully deleted...");
+      } catch (err) {
+        res.status(500).json(err);
+      }
+    } else {
+      res.status(401).json("You can delete only your own post!");
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
 
 
 
