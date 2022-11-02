@@ -10,31 +10,6 @@ const readTimeFunction = (text) => {
   return time;
 } 
 
-// blogRoute.post('/', async (req, res) => {
-//     const body = req.body;
-//     const blogArticle = body.body;
-//     let reading_time;
-
-//     blogArticle ? reading_time = readTimeFunction(blogArticle) : res.json({ status: false, message: "Blog body can't be empty" });
-
-//     const blogDetails = { 
-//         title: body.title,
-//         description: body.description,
-//         tags: body.tags,
-//         author: body.author,
-//         state: body.state,
-//         reading_time,
-//         body: blogArticle
-//     }
-
-//     await blogModel.create(blogDetails)
-//         .then((blog) => {
-//             return res.json({ status: true, blog }).status(201)
-//         }).catch((err) => {
-//             return res.json({ status: false, message: err }).status(403)
-//     })
-// })
-
 
 blogRoute.post('/', async (req, res) => {
   try {
@@ -45,7 +20,6 @@ blogRoute.post('/', async (req, res) => {
         if (blogArticle) {
           reading_time = readTimeFunction(blogArticle)
         }
-        // blogArticle ? reading_time = readTimeFunction(blogArticle) : res.json({ status: false, message: "Blog body can't be empty" });
     
         const blogDetails = { 
             title: body.title,
@@ -70,7 +44,6 @@ blogRoute.post('/', async (req, res) => {
 })
 
 
-
 blogRoute.get('/', async (req, res) => {
 
   const {author, title, tags, read_count, reading_time, time, page = 1, limit = 20} = req.query;
@@ -78,7 +51,6 @@ blogRoute.get('/', async (req, res) => {
   let readCountNum;
   let readTimeNum;
   let timeNum;
-
 
   read_count === "asc" ? readCountNum = 1 : readCountNum = -1;
   reading_time === "asc" ? readTimeNum = 1 : readTimeNum = -1;
