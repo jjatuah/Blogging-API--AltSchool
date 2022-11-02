@@ -103,29 +103,31 @@ blogRoute.get('/:blogId', async (req, res) => {
     }) 
 })
 
-// blogRoute.patch('/:id', async (req, res) => {
-//     const { id } = req.params;
-//     const { state } = req.body.order;
+blogRoute.patch('/:id', async (req, res) => {
 
-//     await orderModel.findById(id)
-//         .then((order) => {
-//             if (!order) {
-//                 return res.status(404).json({ status: false, order: null })
-//             }
-
-//             if (state < order.state) {
-//                 return res.status(422).json({ status: false, order: null, message: 'Invalid operation' })
-//             }
-
-//             order.state = state;
-
-//             order.save();
-
-//             return res.json({ status: true, order })
-//         }).catch((err) => {
-//             return res.json({ status: false, message: err })
-//     })
-// })
+  const blogId = req.params.id;
+  try {
+    const blog = await blogModel.findById(blogId);
+    if (blog.author === req.body.author) {
+      try {
+        const updatedBlog = await blogModel.findByIdAndUpdate(
+          blogId,
+          {
+            $set: req.body,
+          },
+          { new: true }
+        );
+        res.status(200).json(updatedBlog);
+      } catch (err) {
+        res.status(500).json(err);
+      }
+    } else {
+      res.status(401).json("You can only update your own post!");
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
 
 // blogRoute.delete('/:id', async (req, res) => {
 //     const { id } = req.params;

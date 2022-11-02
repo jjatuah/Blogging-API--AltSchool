@@ -26,7 +26,8 @@ const BlogSchema = new mongoose.Schema(
     state: {
       type: String,
       required: true,
-      enum: ['draft', 'published']
+      enum: ['draft', 'published'],
+      default: "draft"
     },
 
     read_count: {
