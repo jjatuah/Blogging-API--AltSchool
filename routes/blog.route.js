@@ -46,7 +46,7 @@ blogRoute.post('/', async (req, res) => {
 
 blogRoute.get('/', async (req, res) => {
 
-  const {author, title, tags, read_count, reading_time, time, page = 1, limit = 20} = req.query;
+  const {author, title, state, tags, read_count, reading_time, time, page = 1, limit = 20} = req.query;
 
   let readCountNum;
   let readTimeNum;
@@ -62,6 +62,8 @@ blogRoute.get('/', async (req, res) => {
       blogs = await blogModel.find({ author }).limit(limit * 1).skip((page - 1) * limit);
     } else if (title) {
       blogs = await blogModel.find({ title }).limit(limit * 1).skip((page - 1) * limit);
+    }else if (state) {
+      blogs = await blogModel.find({ state }).limit(limit * 1).skip((page - 1) * limit);
     } else if (tags) {
       blogs = await blogModel.find({ tags: {
         $in: [tags]
