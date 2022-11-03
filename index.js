@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const app = express()
 
-const blogRoute = require("./routes/blog.route")
+const blogRoute = require("./routes/blog.route");
+const blogsRoute = require("./routes/blogs.route");
 
 const PORT = 7500;
 
@@ -14,10 +15,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use("/blog", blogRoute);
+app.use("/", blogsRoute);
 
-app.get('/', (req, res) => {
-    res.send("Login or signup to make an order")
-})
+
+// app.get('/', (req, res) => {
+//     res.send("Login or signup to make an order")
+// })
 
 
 mongoose.connect('mongodb://localhost:27017')
