@@ -59,6 +59,8 @@ blogsRoute.get('/:blogId', async (req, res) => {
         .then((blog)=> {
             if(!blog) {
                 return res.status(404).json({ status: false, blog : null })
+            } else if (blog.state == "draft") {
+                return res.status(404).json({ status: false, message: "This blog is not yet published" })
             }
 
             blog.read_count++
@@ -69,7 +71,7 @@ blogsRoute.get('/:blogId', async (req, res) => {
             const blogResult = result._doc
             return res.json({ status: true, witten_by : author, blogResult }) 
         }).catch((err) => {
-            return res.json({ status: false, message: err })
+            return res.status(404).json({ status: false, message: err })
     }) 
 })
 
