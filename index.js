@@ -23,13 +23,13 @@ app.use(bodyParser.json());
 
 
 app.use("/", AuthenticationRoute);
-app.use("/authorblog", blogRoute);
+app.use("/authorblog", passport.authenticate('jwt', { session: false }), blogRoute);
 app.use("/blog", blogsRoute);
 
 
-// app.get('/', (req, res) => {
-//     res.send("Login or signup to make an order")
-// })
+app.get('/', (req, res) => {
+    res.send("Key information about this API. 1. use /blog to view all published blogs 2. Login or signup (using /login or /signup) to be able create and manage your blog as an author on /authorblog. ")
+})
 
 
 mongoose.connect('mongodb://localhost:27017')
