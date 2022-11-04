@@ -82,9 +82,15 @@ blogRoute.patch('/:id', async (req, res) => {
 
   const blogId = req.params.id;
 
+  const {secret_token} = req.query;
+
+  const jwtDecoded = jwt.decode(secret_token);
+
+  const blogAuthor = jwtDecoded.user.fullname;
+
   try {
     const blog = await blogModel.findById(blogId);
-    if (blog.author === req.body.author) {
+    if (blog.author === blogAuthor) {
       try {
         const updatedBlog = await blogModel.findByIdAndUpdate(
           blogId,
@@ -116,9 +122,15 @@ blogRoute.put('/:id', async (req, res) => {
 
   const blogId = req.params.id;
 
+  const {secret_token} = req.query;
+
+  const jwtDecoded = jwt.decode(secret_token);
+
+  const blogAuthor = jwtDecoded.user.fullname;
+
   try {
     const blog = await blogModel.findById(blogId);
-    if (blog.author === req.body.author) {
+    if (blog.author === blogAuthor) {
       try {
         const updatedBlog = await blogModel.findByIdAndUpdate(
           blogId,
@@ -150,9 +162,15 @@ blogRoute.delete('/:id', async (req, res) => {
 
   const blogId = req.params.id;
 
+  const {secret_token} = req.query;
+
+  const jwtDecoded = jwt.decode(secret_token);
+
+  const blogAuthor = jwtDecoded.user.fullname;
+
   try {
     const blog = await blogModel.findById(blogId);
-    if (blog.author === req.body.author) {
+    if (blog.author === blogAuthor) {
       try {
         await blog.delete();
         res.status(200).json("Post successfully deleted...");

@@ -28,7 +28,7 @@ app.use("/blog", blogsRoute);
 
 
 app.get('/', (req, res) => {
-    res.send("Key information about this API. 1. use /blog to view all published blogs 2. Login or signup (using /login or /signup) to be able create and manage your blog as an author on /authorblog. ")
+    res.json({ 0: "Key information about this API.",  1: " use /blog to view all published blogs", 2: " Login or signup (using /login or /signup) to be able create and manage your blog as an author on /authorblog route."})
 })
 
 
