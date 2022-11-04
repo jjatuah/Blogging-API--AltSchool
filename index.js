@@ -9,11 +9,9 @@ require("./controllers/authentication.controller");
 
 const AuthenticationRoute = require("./routes/authentication.route")
 
-
-
 const app = express()
 
-const blogRoute = require("./routes/blog.route");
+const authorBlogRoute = require("./routes/authorblog.route");
 const blogsRoute = require("./routes/blogs.route");
 
 const PORT = 7500;
@@ -23,7 +21,7 @@ app.use(bodyParser.json());
 
 
 app.use("/", AuthenticationRoute);
-app.use("/authorblog", passport.authenticate('jwt', { session: false }), blogRoute);
+app.use("/authorblog", passport.authenticate('jwt', { session: false }), authorBlogRoute);
 app.use("/blog", blogsRoute);
 
 

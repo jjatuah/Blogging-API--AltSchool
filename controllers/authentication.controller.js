@@ -22,9 +22,6 @@ passport.use(
     )
 );
 
-// This middleware saves the information provided by the user to the database,
-// and then sends the user information to the next middleware if successful.
-// Otherwise, it reports an error.
 passport.use(
     'signup',
     new localStrategy(
@@ -32,9 +29,6 @@ passport.use(
             usernameField: 'username',
             passwordField: 'password',
             passReqToCallback: true
-            // emailField: "email",
-            // firstnameField: 'firstname',
-            // lastnameField: "lastname",
         },
         async (req, username, password, done) => {
 
@@ -52,9 +46,6 @@ passport.use(
     )
 );
 
-// This middleware authenticates the user based on the email and password provided.
-// If the user is found, it sends the user information to the next middleware.
-// Otherwise, it reports an error.
 passport.use(
     'login',
     new localStrategy(
