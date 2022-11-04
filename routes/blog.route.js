@@ -2,6 +2,7 @@ const express = require("express");
 const blogModel = require("../models/blog.model");
 
 const blogRoute = express.Router();
+const jwt = require('jsonwebtoken');
 
 const readTimeFunction = (text) => {
   const wpm = 250;
@@ -12,6 +13,13 @@ const readTimeFunction = (text) => {
 
 
 blogRoute.post('/', async (req, res) => {
+
+  const {secret_token} = req.query;
+
+  const jwtDecoded = jwt.decode(secret_token);
+
+  const blogAuthor = jwtDecoded.user.fullname;
+
   try {
         const body = req.body;
         const blogArticle = body.body;
@@ -25,8 +33,7 @@ blogRoute.post('/', async (req, res) => {
             title: body.title,
             description: body.description,
             tags: body.tags,
-            author: body.author,
-            state: body.state,
+            author: blogAuthor,
             reading_time,
             body: blogArticle
         }
