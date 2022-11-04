@@ -1,6 +1,6 @@
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
-const UserModel = require('../Models/userModel');
+const UserModel = require('../models/user.model');
 
 const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
@@ -30,11 +30,19 @@ passport.use(
     new localStrategy(
         {
             usernameField: 'username',
-            passwordField: 'password'
+            passwordField: 'password',
+            passReqToCallback: true
+            // emailField: "email",
+            // firstnameField: 'firstname',
+            // lastnameField: "lastname",
         },
-        async (username, password, done) => {
+        async (req, username, password, done) => {
+
+            let email = req.body.email
+            let firstname = req.body.firstname
+            let lastname = req.body.lastname
             try {
-                const user = await UserModel.create({ username, password });
+                const user = await UserModel.create({ username, password, email, firstname, lastname });
 
                 return done(null, user);
             } catch (error) {

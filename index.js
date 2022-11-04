@@ -4,6 +4,13 @@ const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
 require('dotenv').config();
+
+require("./controllers/authentication.controller");
+
+const AuthenticationRoute = require("./routes/authentication.route")
+
+
+
 const app = express()
 
 const blogRoute = require("./routes/blog.route");
@@ -14,8 +21,10 @@ const PORT = 7500;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use("/blog", blogRoute);
-app.use("/", blogsRoute);
+
+app.use("/", AuthenticationRoute);
+app.use("/authorblog", blogRoute);
+app.use("/blog", blogsRoute);
 
 
 // app.get('/', (req, res) => {

@@ -3,9 +3,9 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const authRouter = express.Router();
+const authenticationRouter = express.Router();
 
-authRouter.post(
+authenticationRouter.post(
     '/signup',
     passport.authenticate('signup', { session: false }), async (req, res, next) => {
         res.json({
@@ -15,7 +15,7 @@ authRouter.post(
     }
 );
 
-authRouter.post(
+authenticationRouter.post(
     '/login',
     async (req, res, next) => {
         passport.authenticate('login', async (err, user, info) => {
@@ -32,11 +32,11 @@ authRouter.post(
                     async (error) => {
                         if (error) return next(error);
 
-                        const body = { _id: user._id, username: user.username };
+                        const body = { _id: user._id, username: user.username, fullname: user.fullname };
                         //You store the id and email in the payload of the JWT. 
                         // You then sign the token with a secret or key (JWT_SECRET), and send back the token to the user.
                         // DO NOT STORE PASSWORDS IN THE JWT!
-                        const token = jwt.sign({ user: body }, process.env.JWT_SECRET);
+                        const token = jwt.sign({ user: body }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
                         return res.json({ token });
                     }
@@ -49,4 +49,4 @@ authRouter.post(
     }
 );
 
-module.exports = authRouter;
+module.exports = authenticationRouter;
