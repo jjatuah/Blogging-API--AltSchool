@@ -1,7 +1,7 @@
 const express = require("express");
 const blogModel = require("../models/blog.model");
 
-const blogRoute = express.Router();
+const authorBlogRoute = express.Router();
 const jwt = require('jsonwebtoken');
 
 const readTimeFunction = (text) => {
@@ -12,7 +12,7 @@ const readTimeFunction = (text) => {
 } 
 
 
-blogRoute.post('/', async (req, res) => {
+authorBlogRoute.post('/', async (req, res) => {
 
   const {secret_token} = req.query;
 
@@ -51,7 +51,7 @@ blogRoute.post('/', async (req, res) => {
 })
 
 
-blogRoute.get('/', async (req, res) => {
+authorBlogRoute.get('/', async (req, res) => {
 
   const {secret_token, page = 1, limit = 20} = req.query;
 
@@ -77,8 +77,34 @@ blogRoute.get('/', async (req, res) => {
 })
 
 
+authorBlogRoute.get('/:blogId', async (req, res) => {
+  const { blogId } = req.params;
 
-blogRoute.patch('/:id', async (req, res) => {
+  const {secret_token} = req.query;
+
+  const jwtDecoded = jwt.decode(secret_token);
+
+  const blogAuthor = jwtDecoded.user.fullname;
+  
+  await blogModel.findById(blogId)
+      .then((blog)=> {
+          if(!blog) {
+              return res.status(404).json({ status: false, blog : null })
+          } else if (blogAuthor === blog.author) {
+            const { author, ...result } = blog;
+            const blogResult = result._doc
+            return res.json({ status: true, witten_by : author, blogResult })
+          } else {
+            return res.status(401).json({ status: false, message : "you can only view blogs written by you" })
+          } 
+      }).catch((err) => {
+          return res.status(404).json({ status: false, message: err })
+  }) 
+})
+
+
+
+authorBlogRoute.patch('/:id', async (req, res) => {
 
   const blogId = req.params.id;
 
@@ -118,7 +144,7 @@ blogRoute.patch('/:id', async (req, res) => {
   }
 })
 
-blogRoute.put('/:id', async (req, res) => {
+authorBlogRoute.put('/:id', async (req, res) => {
 
   const blogId = req.params.id;
 
@@ -158,7 +184,7 @@ blogRoute.put('/:id', async (req, res) => {
   }
 })
 
-blogRoute.delete('/:id', async (req, res) => {
+authorBlogRoute.delete('/:id', async (req, res) => {
 
   const blogId = req.params.id;
 
@@ -187,4 +213,4 @@ blogRoute.delete('/:id', async (req, res) => {
 
 
 
-module.exports = blogRoute;
+module.exports = authorBlogRoute;
