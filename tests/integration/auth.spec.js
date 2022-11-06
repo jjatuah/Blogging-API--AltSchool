@@ -1,21 +1,22 @@
 const request = require('supertest')
-const { connect } = require('./database')
+const { connect } = require('../../dbConnect')
 const UserModel = require('../../models/user.model')
 const app = require('../../index');
+const { default: mongoose } = require('mongoose');
 
 describe('Auth: Signup', () => {
-    let conn;
 
     beforeAll(async () => {
-        conn = await connect()
+         await connect('mongodb://localhost:27017/testDatabase')
     })
 
-    afterEach(async () => {
-        await conn.cleanup()
-    })
+    // afterEach(async () => {
+    //     await UserModel.remove({})
+    // })
 
     afterAll(async () => {
-        await conn.disconnect()
+        await UserModel.remove({})
+        await mongoose.connection.close()
     })
 
     it('should signup a user', async () => {
@@ -24,12 +25,12 @@ describe('Auth: Signup', () => {
         .send({ 
             username: 'tobi', 
             password: 'Password123', 
-            firstName: 'tobie',
-            lastName: 'Augustina',
+            firstname: 'tobie',
+            lastname: 'Augustina',
             email: 'tobi@mail.com'
         })
 
-        expect(response.status).toBe(201)
+        expect(response.status).toBe(200)
         expect(response.body).toHaveProperty('message')
         expect(response.body).toHaveProperty('user')
         expect(response.body.user).toHaveProperty('username', 'tobi')
@@ -41,7 +42,7 @@ describe('Auth: Signup', () => {
 
     it('should login a user', async () => {
         // create user in out db
-        const user = await UserModel.create({ username: 'tobi', password: '123456'});
+        // const user = await UserModel.create({ username: 'tobi', password: '123456'});
 
         // login user
         const response = await request(app)
@@ -49,7 +50,7 @@ describe('Auth: Signup', () => {
         .set('content-type', 'application/json')
         .send({ 
             username: 'tobi', 
-            password: '123456'
+            password: 'Password123'
         });
     
 

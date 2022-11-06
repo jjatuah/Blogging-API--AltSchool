@@ -2,87 +2,185 @@ const request = require('supertest')
 const { connect } = require('../../dbConnect')
 const app = require('../../index');
 const BlogSchema = require('../../models/blog.model');
-const UserModel = require('../../models/user.model')
+const UserModel = require('../../models/user.model');
+const { default: mongoose } = require('mongoose');
 
 
-describe('Order Route', () => {
-    let conn;
+describe('Author Blog Route', () => {
     let token;
+    let idText;
 
     beforeAll(async () => {
-        conn = await connect()
+        await connect('mongodb://localhost:27017/testDatabase')
 
-        await UserModel.create({ username: 'tobi', password: '123456'});
+        await UserModel.create({
+            username: 'tobias', 
+            password: 'Password123', 
+            firstname: 'tobie',
+            lastname: 'Augustina',
+            email: 'tobias@mail.com'
+        });
 
         const loginResponse = await request(app)
         .post('/login')
         .set('content-type', 'application/json')
         .send({ 
-            username: 'tobi', 
-            password: '123456'
+            username: 'tobias', 
+            password: 'Password123'
         });
 
         token = loginResponse.body.token;
+        console.log(token);
+
+        let testBlog = await BlogSchema.create({
+          title: "test blog",
+          description: "test blog",
+          tags: ["test", "blog"],
+          author: "tobie Augustina",
+          reading_time: 1,
+          body: " Random text for testing purposes"
+        })
+
+        idText = testBlog._id.valueOf();
+
+        console.log(idText);
     })
 
-    afterEach(async () => {
-        await conn.cleanup()
-    })
+    // afterEach(async () => {
+    //     await conn.cleanup()
+    // })
 
     afterAll(async () => {
-        await conn.disconnect()
+      await UserModel.remove({})
+      await BlogSchema.remove({})
+      await mongoose.connection.close()
     })
 
-    it('should return orders', async () => {
-        // create order in our db
-        await BlogModel.create({
-            state: 1,
-            total_price: 900,
-            created_at: moment().toDate(),
-            items: [{ name: 'chicken pizza', price: 900, size: 'm', quantity: 1}]
-        })
-
-        await BlogModel.create({
-            state: 1,
-            total_price: 900,
-            created_at: moment().toDate(),
-            items: [{ name: 'chicken pizza', price: 900, size: 'm', quantity: 1}]
-        })
-
+    it('should create a new blog', async () => {
+        // create blog in our db
         const response = await request(app)
-        .get('/orders')
+        .post(`/authorblog?secret_token=${token}`)
         .set('content-type', 'application/json')
-        .set('Authorization', `Bearer ${token}`)
+        .send({
+            title: "beauty and the beast",
+            description: "A book about beauty and the beast",
+            tags: ["beauty", "beast"],
+            body: "Midsummer Night's Dream is a comedy written by William Shakespeare c. 1595 or 1596. The play is set in Athens, and consists of several subplots that revolve around the marriage of Theseus and Hippolyta. One subplot involves a conflict among four Athenian lovers. another follows a group of six amateur actors rehearsing the play which they are to perform before the wedding. his master play a trick on the fairy queen. In the end, Puck reverses the magic, and the two couples reconcile and marry.Four Athenians run away to the forest only to have Puck the fairy make both of the boys fall in love with the same girl. The four run through the forest pursuing ea. Four Athenians run away to the forest only to have Puck the fairy make both of the boys fall in love with the same girl. The four run through the forest pursuing each other while Puck helps his master play a trick on the fairy queen. In the end, Puck reverses the magic, and the two couples reconcile and marry.Four Athenians run away to the forest only to have Puck the fairy make both of the boys fall in love with the same girl. The four run through the forest pursuing eaFour Athenians run away to the forest only to have Puck the fairy make both of the boys fall in love with the same girl. The four run through the forest pursuing each other while Puck helps his master play a trick on the fairy queen. In the end, Puck reverses the magic, and the two couples reconcile and marry.Four Athenians run away to the forest only to have Puck the fairy make both of the boys fall in love with the same girl"
+        })
 
         expect(response.status).toBe(200)
-        expect(response.body).toHaveProperty('orders')
-        expect(response.body).toHaveProperty('status', true)
+        expect(response.body).toHaveProperty("blog")
+        expect(response.body.blog).toHaveProperty("author")
+        expect(response.body.blog).toHaveProperty("read_count")
+        expect(response.body.blog).toHaveProperty("reading_time")
     })
 
-    it('should return orders with state 2', async () => {
-        // create order in our db
-        await BlogModel.create({
-            state: 1,
-            total_price: 900,
-            created_at: moment().toDate(),
-            items: [{ name: 'chicken pizza', price: 900, size: 'm', quantity: 1}]
-        })
+    it('should update a blog', async () => {
+      // update a blog in our db
+      console.log(idText);
+      const response = await request(app)
+      .put(`/authorblog/${idText}?secret_token=${token}`)
+      .set('content-type', 'application/json')
+      .send({
+          description: "Updated Description",
+          tags: ["updated", "blog"],
+          state: "published",
+          body: "Blog body for the updated blog."
+      })
 
-        await BlogModel.create({
-            state: 2,
-            total_price: 900,
-            created_at: moment().toDate(),
-            items: [{ name: 'chicken pizza', price: 900, size: 'm', quantity: 1}]
-        })
+      console.log(response.body);
 
-        const response = await request(app)
-        .get('/orders?state=2')
-        .set('content-type', 'application/json')
-        .set('Authorization', `Bearer ${token}`)
+      expect(response.status).toBe(200)
+      expect(response.body.state).toEqual("published")
+      expect(response.body).toHaveProperty("author")
+      expect(response.body).toHaveProperty("read_count")
+      expect(response.body).toHaveProperty("reading_time")
+  })
 
-        expect(response.status).toBe(200)
-        expect(response.body).toHaveProperty('orders')
-        expect(response.body).toHaveProperty('status', true)
-        expect(response.body.orders.every(order => order.state === 2)).toBe(true)
+
+  it('should update a blog', async () => {
+    // update a blog in our db
+    console.log(idText);
+    const response = await request(app)
+    .patch(`/authorblog/${idText}?secret_token=${token}`)
+    .set('content-type', 'application/json')
+    .send({
+        description: "Updated Description",
+        tags: ["updated", "blog"],
+        state: "published",
+        body: "Blog body for the  updated blog."
     })
+
+    console.log(response.body);
+
+    expect(response.status).toBe(200)
+    expect(response.body.state).toEqual("published")
+    expect(response.body).toHaveProperty("author")
+    expect(response.body).toHaveProperty("read_count")
+    expect(response.body).toHaveProperty("reading_time")
+})
+
+  it("should get all the author's blogs", async () => {
+    // should get all the blogs created by the logged in author
+    const response = await request(app)
+    .get(`/authorblog?secret_token=${token}`)
+    .set('content-type', 'application/json')
+
+    expect(response.status).toBe(200)
+    expect(response.body).toHaveProperty("total_blogs")
+    expect(response.body).toHaveProperty("blogs")
+  })
+
+  it("should get a particular blog from the author", async () => {
+    // should get a particular blog from the author
+    const response = await request(app)
+    .get(`/authorblog/${idText}?secret_token=${token}`)
+    .set('content-type', 'application/json')
+
+    console.log(response);
+
+    expect(response.status).toBe(200)
+    expect(response.body).toHaveProperty("blogResult")
+    expect(response.body).toHaveProperty("witten_by")
+    expect(response.body).toHaveProperty("status")
+  })
+
+
+  it("should delete a particular blog from the author", async () => {
+    // should get a particular blog from the author
+    const response = await request(app)
+    .delete(`/authorblog/${idText}?secret_token=${token}`)
+    .set('content-type', 'application/json')
+
+    expect(response.status).toBe(200)
+  })
+
+
+
+    // it('should return orders with state 2', async () => {
+    //     // create order in our db
+    //     await BlogModel.create({
+    //         state: 1,
+    //         total_price: 900,
+    //         created_at: moment().toDate(),
+    //         items: [{ name: 'chicken pizza', price: 900, size: 'm', quantity: 1}]
+    //     })
+
+    //     await BlogModel.create({
+    //         state: 2,
+    //         total_price: 900,
+    //         created_at: moment().toDate(),
+    //         items: [{ name: 'chicken pizza', price: 900, size: 'm', quantity: 1}]
+    //     })
+
+    //     const response = await request(app)
+    //     .get('/orders?state=2')
+    //     .set('content-type', 'application/json')
+    //     .set('Authorization', `Bearer ${token}`)
+
+    //     expect(response.status).toBe(200)
+    //     expect(response.body).toHaveProperty('orders')
+    //     expect(response.body).toHaveProperty('status', true)
+    //     expect(response.body.orders.every(order => order.state === 2)).toBe(true)
+    // })
 });
