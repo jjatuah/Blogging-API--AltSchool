@@ -155,32 +155,4 @@ describe('Author Blog Route', () => {
     expect(response.status).toBe(200)
   })
 
-
-
-    // it('should return orders with state 2', async () => {
-    //     // create order in our db
-    //     await BlogModel.create({
-    //         state: 1,
-    //         total_price: 900,
-    //         created_at: moment().toDate(),
-    //         items: [{ name: 'chicken pizza', price: 900, size: 'm', quantity: 1}]
-    //     })
-
-    //     await BlogModel.create({
-    //         state: 2,
-    //         total_price: 900,
-    //         created_at: moment().toDate(),
-    //         items: [{ name: 'chicken pizza', price: 900, size: 'm', quantity: 1}]
-    //     })
-
-    //     const response = await request(app)
-    //     .get('/orders?state=2')
-    //     .set('content-type', 'application/json')
-    //     .set('Authorization', `Bearer ${token}`)
-
-    //     expect(response.status).toBe(200)
-    //     expect(response.body).toHaveProperty('orders')
-    //     expect(response.body).toHaveProperty('status', true)
-    //     expect(response.body.orders.every(order => order.state === 2)).toBe(true)
-    // })
 });

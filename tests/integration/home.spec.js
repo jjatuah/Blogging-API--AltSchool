@@ -3,7 +3,7 @@ const app = require('../../index');
 
 
 describe('Home Route', () => {
-    it('Should return status true', async () => {
+    it('testing the home route', async () => {
         const response = await request(app).get('/').set('content-type', 'application/json')
         expect(response.status).toBe(200)
         expect(response.body.status).toEqual(true)
