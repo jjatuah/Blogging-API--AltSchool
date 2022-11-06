@@ -14,7 +14,7 @@ const app = express()
 const authorBlogRoute = require("./routes/authorblog.route");
 const blogsRoute = require("./routes/blogs.route");
 
-const PORT = 7500;
+// const PORT = 7500;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -30,16 +30,16 @@ app.get('/', (req, res) => {
 })
 
 
-mongoose.connect('mongodb://localhost:27017')
+// mongoose.connect('mongodb://localhost:27017')
 
-mongoose.connection.on("connected", () => {
-	console.log("Connected to MongoDB Successfully");
-});
+// mongoose.connection.on("connected", () => {
+// 	console.log("Connected to MongoDB Successfully");
+// });
 
-mongoose.connection.on("error", (err) => {
-	console.log("An error occurred while connecting to MongoDB");
-	console.log(err);
-});
+// mongoose.connection.on("error", (err) => {
+// 	console.log("An error occurred while connecting to MongoDB");
+// 	console.log(err);
+// });
 
 app.use(function (err, req, res, next) {
     console.log(err);
@@ -48,8 +48,8 @@ app.use(function (err, req, res, next) {
 });
 
 
-app.listen(PORT, () => {
-    console.log('Listening on port, ', PORT)
-})
+// app.listen(PORT, () => {
+//     console.log('Listening on port, ', PORT)
+// })
 
 module.exports = app;
