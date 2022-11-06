@@ -137,7 +137,6 @@ describe('Author Blog Route', () => {
     .get(`/authorblog/${idText}?secret_token=${token}`)
     .set('content-type', 'application/json')
 
-    console.log(response);
 
     expect(response.status).toBe(200)
     expect(response.body).toHaveProperty("blogResult")

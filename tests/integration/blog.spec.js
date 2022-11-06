@@ -5,7 +5,7 @@ const BlogSchema = require('../../models/blog.model');
 const { default: mongoose } = require('mongoose');
 
 
-describe('Testing the Blog Route for logged-in and and not logged-in users', () => {#
+describe('Testing the Blog Route for logged-in and and not logged-in users', () => {
   let idText;
 
   beforeAll(async () => {
@@ -37,12 +37,25 @@ describe('Testing the Blog Route for logged-in and and not logged-in users', () 
   })
 
 
-    // it('testing the home route', async () => {
-    //     const response = await request(app).get('/blog').set('content-type', 'application/json')
-    //     expect(response.status).toBe(200)
-    //     expect(response.body.status).toEqual(true)
-    //     expect(response.body.i).toEqual("Key information about this API.")
-    //     expect(response.body.ii).toEqual("use /blog to view all published blogs")
-    //     expect(response.body.iii).toEqual("Login or signup (using /login or /signup) to be able create and manage your blog as an author on /authorblog route.")
-    // })
+    it('testing the /blog route', async () => {
+      // will return all the published blogs and their details
+        const response = await request(app).get('/blog').set('content-type', 'application/json')
+
+        
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty("total_blogs")
+        expect(response.body).toHaveProperty("blogs")
+    })
+
+
+    it('testing the /blog route with an id', async () => {
+      // will return the specific published blog and its details
+        const response = await request(app).get(`/blog/${idText}`).set('content-type', 'application/json')
+
+        
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty("blogResult")
+        expect(response.body).toHaveProperty("witten_by")
+        expect(response.body).toHaveProperty("status")
+    })
 });
