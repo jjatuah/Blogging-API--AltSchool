@@ -3,12 +3,15 @@ const { connect } = require('../../dbConnect')
 const UserModel = require('../../models/user.model')
 const app = require('../../index');
 const { default: mongoose } = require('mongoose');
+require('dotenv').config();
+
+
 
 describe('Auth: Signup', () => {
 
     beforeAll(async () => {
-         await connect('mongodb://localhost:27017/testDatabase')
-    })
+         await connect()
+    }, 180000)
 
     // afterEach(async () => {
     //     await UserModel.remove({})
@@ -17,7 +20,7 @@ describe('Auth: Signup', () => {
     afterAll(async () => {
         await UserModel.remove({})
         await mongoose.connection.close()
-    })
+    }, 180000)
 
     it('should signup a user', async () => {
         const response = await request(app).post('/signup')
@@ -37,7 +40,7 @@ describe('Auth: Signup', () => {
         expect(response.body.user).toHaveProperty('firstname', 'tobie')
         expect(response.body.user).toHaveProperty('lastname', 'Augustina')
         expect(response.body.user).toHaveProperty('email', 'tobi@mail.com')        
-    })
+    }, 180000)
 
 
     it('should login a user', async () => {
@@ -56,5 +59,5 @@ describe('Auth: Signup', () => {
 
         expect(response.status).toBe(200)
         expect(response.body).toHaveProperty('token')      
-    })
+    }, 180000)
 })

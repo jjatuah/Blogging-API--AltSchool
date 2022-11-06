@@ -4,6 +4,7 @@ const app = require('../../index');
 const BlogSchema = require('../../models/blog.model');
 const UserModel = require('../../models/user.model');
 const { default: mongoose } = require('mongoose');
+require('dotenv').config();
 
 
 describe('Author Blog Route', () => {
@@ -11,7 +12,7 @@ describe('Author Blog Route', () => {
     let idText;
 
     beforeAll(async () => {
-        await connect('mongodb://localhost:27017/testDatabase')
+        await connect()
 
         await UserModel.create({
             username: 'tobias', 
@@ -30,7 +31,6 @@ describe('Author Blog Route', () => {
         });
 
         token = loginResponse.body.token;
-        console.log(token);
 
         let testBlog = await BlogSchema.create({
           title: "test blog",
@@ -43,8 +43,7 @@ describe('Author Blog Route', () => {
 
         idText = testBlog._id.valueOf();
 
-        console.log(idText);
-    })
+    }, 180000)
 
     // afterEach(async () => {
     //     await conn.cleanup()
@@ -54,7 +53,7 @@ describe('Author Blog Route', () => {
       await UserModel.remove({})
       await BlogSchema.remove({})
       await mongoose.connection.close()
-    })
+    }, 180000)
 
     it('should create a new blog', async () => {
         // create blog in our db
@@ -73,11 +72,10 @@ describe('Author Blog Route', () => {
         expect(response.body.blog).toHaveProperty("author")
         expect(response.body.blog).toHaveProperty("read_count")
         expect(response.body.blog).toHaveProperty("reading_time")
-    })
+    }, 180000)
 
     it('should update a blog', async () => {
       // update a blog in our db
-      console.log(idText);
       const response = await request(app)
       .put(`/authorblog/${idText}?secret_token=${token}`)
       .set('content-type', 'application/json')
@@ -88,19 +86,17 @@ describe('Author Blog Route', () => {
           body: "Blog body for the updated blog."
       })
 
-      console.log(response.body);
 
       expect(response.status).toBe(200)
       expect(response.body.state).toEqual("published")
       expect(response.body).toHaveProperty("author")
       expect(response.body).toHaveProperty("read_count")
       expect(response.body).toHaveProperty("reading_time")
-  })
+  }, 180000)
 
 
   it('should update a blog', async () => {
     // update a blog in our db
-    console.log(idText);
     const response = await request(app)
     .patch(`/authorblog/${idText}?secret_token=${token}`)
     .set('content-type', 'application/json')
@@ -111,14 +107,13 @@ describe('Author Blog Route', () => {
         body: "Blog body for the  updated blog."
     })
 
-    console.log(response.body);
 
     expect(response.status).toBe(200)
     expect(response.body.state).toEqual("published")
     expect(response.body).toHaveProperty("author")
     expect(response.body).toHaveProperty("read_count")
     expect(response.body).toHaveProperty("reading_time")
-})
+}, 180000)
 
   it("should get all the author's blogs", async () => {
     // should get all the blogs created by the logged in author
@@ -129,7 +124,7 @@ describe('Author Blog Route', () => {
     expect(response.status).toBe(200)
     expect(response.body).toHaveProperty("total_blogs")
     expect(response.body).toHaveProperty("blogs")
-  })
+  }, 180000)
 
   it("should get a particular blog from the author", async () => {
     // should get a particular blog from the author
@@ -142,7 +137,7 @@ describe('Author Blog Route', () => {
     expect(response.body).toHaveProperty("blogResult")
     expect(response.body).toHaveProperty("witten_by")
     expect(response.body).toHaveProperty("status")
-  })
+  }, 180000)
 
 
   it("should delete a particular blog from the author", async () => {
@@ -152,6 +147,6 @@ describe('Author Blog Route', () => {
     .set('content-type', 'application/json')
 
     expect(response.status).toBe(200)
-  })
+  }, 180000)
 
 });
