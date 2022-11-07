@@ -7,10 +7,10 @@ require('dotenv').config();
 
 
 describe('Testing the Blog Route for logged-in and and not logged-in users', () => {
-  let idText;
+  let idText; 
 
   beforeAll(async () => {
-      await connect()
+      await connect("mongodb+srv://joejat:joejat2425@cluster0.ezbhlyf.mongodb.net/testrouter?retryWrites=true&w=majority")
 
 
       let testBlog = await BlogSchema.create({
@@ -25,7 +25,7 @@ describe('Testing the Blog Route for logged-in and and not logged-in users', () 
 
       idText = testBlog._id.valueOf();
 
-  }, 180000)
+  }, 360000)
 
   // afterEach(async () => {
   //     await conn.cleanup()
@@ -34,7 +34,7 @@ describe('Testing the Blog Route for logged-in and and not logged-in users', () 
   afterAll(async () => {
     await BlogSchema.remove({})
     await mongoose.connection.close()
-  }, 180000)
+  }, 360000)
 
 
     it('testing the /blog route', async () => {
@@ -45,7 +45,7 @@ describe('Testing the Blog Route for logged-in and and not logged-in users', () 
         expect(response.status).toBe(200)
         expect(response.body).toHaveProperty("total_blogs")
         expect(response.body).toHaveProperty("blogs")
-    }, 180000)
+    }, 360000)
 
 
     it('testing the /blog route with an id', async () => {
@@ -57,5 +57,5 @@ describe('Testing the Blog Route for logged-in and and not logged-in users', () 
         expect(response.body).toHaveProperty("blogResult")
         expect(response.body).toHaveProperty("witten_by")
         expect(response.body).toHaveProperty("status")
-    }, 180000)
+    }, 360000)
 });

@@ -10,8 +10,8 @@ require('dotenv').config();
 describe('Auth: Signup', () => {
 
     beforeAll(async () => {
-         await connect()
-    }, 180000)
+         await connect("mongodb+srv://joejat:joejat2425@cluster0.ezbhlyf.mongodb.net/testrouter?retryWrites=true&w=majority")
+    }, 360000)
 
     // afterEach(async () => {
     //     await UserModel.remove({})
@@ -20,7 +20,7 @@ describe('Auth: Signup', () => {
     afterAll(async () => {
         await UserModel.remove({})
         await mongoose.connection.close()
-    }, 180000)
+    }, 360000)
 
     it('should signup a user', async () => {
         const response = await request(app).post('/signup')
@@ -40,7 +40,7 @@ describe('Auth: Signup', () => {
         expect(response.body.user).toHaveProperty('firstname', 'tobie')
         expect(response.body.user).toHaveProperty('lastname', 'Augustina')
         expect(response.body.user).toHaveProperty('email', 'tobi@mail.com')        
-    }, 180000)
+    }, 360000)
 
 
     it('should login a user', async () => {
@@ -59,5 +59,5 @@ describe('Auth: Signup', () => {
 
         expect(response.status).toBe(200)
         expect(response.body).toHaveProperty('token')      
-    }, 180000)
+    }, 360000)
 })
