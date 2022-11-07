@@ -235,6 +235,7 @@ Success
 - Method: POST
 - Header
   - Authorization (Query Parameters): secret_token = {token}
+- the blog author is updated based on the full name of the logged in user
 - Body:
 
 ```
