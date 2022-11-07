@@ -76,6 +76,89 @@ This is an api for a Blog
 
 ---
 
+### Routes For Non-Logged in Users
+
+### Get all published Blogs
+
+- Route: /blog
+- Method: GET
+- Responses
+
+Success
+
+{
+"total_blogs": 2,
+"blogs": [
+{
+"\_id": "6369006fafed4b7c8b529d04",
+"title": "Janet's Blog Post",
+"description": "A blog post by Janet Jonah Tukura",
+"tags": [
+"Tukura",
+"Blog",
+"Janet"
+],
+"author": "janet jonah",
+"state": "published",
+"read_count": 0,
+"reading_time": 1,
+"body": "Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.",
+"createdAt": "2022-11-07T12:56:15.157Z",
+"updatedAt": "2022-11-07T13:13:20.316Z",
+"**v": 0
+},
+{
+"\_id": "636907ceafed4b7c8b529d0c",
+"title": "Janet's second Blog Post",
+"description": "A second blog post by Janet Jonah Tukura",
+"tags": [
+"Tukura",
+"Blog",
+"Janet"
+],
+"author": "janet jonah",
+"state": "published",
+"read_count": 0,
+"reading_time": 2,
+"body": "Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria. Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.",
+"createdAt": "2022-11-07T13:27:42.072Z",
+"updatedAt": "2022-11-07T13:29:51.190Z",
+"**v": 0
+}
+]
+}
+
+### Get a specific published Blog by id for non-logged in users
+
+- Route: /blog/:id
+- Method: GET
+- Responses
+
+Success
+
+{
+"status": true,
+"witten_by": "janet jonah",
+"blogResult": {
+"\_id": "636907ceafed4b7c8b529d0c",
+"title": "Janet's second Blog Post",
+"description": "A second blog post by Janet Jonah Tukura",
+"tags": [
+"Tukura",
+"Blog",
+"Janet"
+],
+"author": "janet jonah",
+"state": "published",
+"read_count": 1,
+"reading_time": 2,
+"body": "Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria. Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.",
+"createdAt": "2022-11-07T13:27:42.072Z",
+"updatedAt": "2022-11-07T13:29:51.190Z",
+"\_\_v": 0
+}
+}
+
 ### Signup User
 
 - Route: /signup
