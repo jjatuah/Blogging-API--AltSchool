@@ -157,7 +157,6 @@ Success
 ```
 
 {
-{
 "title": "Janet's Blog Post",
 "description": "A blog post by Janet Jonah Tukura",
 "tags": ["Tukura", "Blog", "Janet"],
@@ -165,7 +164,7 @@ Success
 Jukun people are very proud people and their tribe is a minor tribe in Nigeria.
 Jukun people are very proud people and their tribe is a minor tribe in Nigeria.
 Jukun people are very proud people and their tribe is a minor tribe in Nigeria.
-Jukun people are very proud people and their tribe is a minor tribe in Nigeria."}
+Jukun people are very proud people and their tribe is a minor tribe in Nigeria."
 }
 
 ```
@@ -244,7 +243,7 @@ Success
 
 ### Get specific blog by the author
 
-- Route: /orders/ :id
+- Route: /authorblog/ :id
 - Method: GET
 - Header:
   - Authorization (Query Parameters): secret_token = {token}
@@ -282,6 +281,51 @@ Success
 ---
 
 ...
+
+### update specific blog by the author
+
+- Route: /authorblog/ :id
+- Method: PATCH
+- Header:
+  - Authorization (Query Parameters): secret_token = {token}
+- Body:
+  {
+    "state":"published"
+  }
+
+
+- Responses
+
+Success
+
+```
+
+{
+"\_id": "6369006fafed4b7c8b529d04",
+"title": "Janet's Blog Post",
+"description": "A blog post by Janet Jonah Tukura",
+"tags": [
+"Tukura",
+"Blog",
+"Janet"
+],
+"author": "janet jonah",
+"state": "published",
+"read_count": 0,
+"reading_time": 1,
+"body": "Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.Jukun people are very proud people and their tribe is a minor tribe in Nigeria.",
+"createdAt": "2022-11-07T12:56:15.157Z",
+"updatedAt": "2022-11-07T13:13:20.316Z",
+"\_\_v": 0
+}
+
+```
+
+---
+
+...
+
+
 
 ## Contributor
 
