@@ -44,6 +44,11 @@ const BlogSchema = new mongoose.Schema(
       required: true,
       unique: true
     },
+
+    image: {
+      data: Buffer,
+      contentType: String
+    }
   },
   { timestamps: true }
 );
