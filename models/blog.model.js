@@ -45,10 +45,7 @@ const BlogSchema = new mongoose.Schema(
       unique: true
     },
 
-    image: {
-      data: Buffer,
-      contentType: String
-    }
+    files: [Object]
   },
   { timestamps: true }
 );

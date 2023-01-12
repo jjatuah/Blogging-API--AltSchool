@@ -3,6 +3,7 @@ const blogModel = require("../models/blog.model");
 
 const authorBlogRoute = express.Router();
 const jwt = require('jsonwebtoken');
+const {blogImages, fileSizeConverter} = require ("../uploadFunction");
 
 const readTimeFunction = (text) => {
   const wpm = 250;
@@ -12,13 +13,25 @@ const readTimeFunction = (text) => {
 } 
 
 
-authorBlogRoute.post('/', async (req, res) => {
+authorBlogRoute.post('/', blogImages.array("files", 10), async (req, res) => {
 
   const {secret_token} = req.query;
 
   const jwtDecoded = jwt.decode(secret_token);
 
   const blogAuthor = jwtDecoded.user.fullname;
+
+  let filesArray = [];
+  req.files.forEach( element => {
+    const file = {
+      fileName: element.originalname, 
+      fileType: element.mimetype,
+      fileSize: fileSizeConverter(element.size, 2)
+    }
+
+    filesArray.push(file);
+  })
+
 
   try {
         const body = req.body;
@@ -35,7 +48,8 @@ authorBlogRoute.post('/', async (req, res) => {
             tags: body.tags,
             author: blogAuthor,
             reading_time,
-            body: blogArticle
+            body: blogArticle,
+            files: filesArray
         }
     
         await blogModel.create(blogDetails)
